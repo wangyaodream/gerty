@@ -33,3 +33,6 @@ annie_*
 *.mp4
 *.mkv
 *.webm
+
+# Custom
+common.config

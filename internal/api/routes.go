@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	rootPath = "/api/"
+	rootPath   = "/api/"
+	noAuthPath = "/out/api/"
 )
 
 func CmsRouter(r *gin.Engine) {
@@ -24,5 +25,10 @@ func CmsRouter(r *gin.Engine) {
 		// 运行逻辑绑定到一个特定的Hello方法中
 		// root.GET("/cms/hello", cmsApp.Hello)
 		root.POST("/cms/hello", cmsApp.Hello)
+	}
+
+	noAuth := r.Group(noAuthPath)
+	{
+		noAuth.POST("/cms/register", cmsApp.Register)
 	}
 }
