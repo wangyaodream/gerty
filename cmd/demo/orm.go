@@ -34,22 +34,22 @@ func (a Account) TableName() string {
 	return "cms_account.account"
 }
 
-func main() {
-	db := connDB()
-	// var accounts []Account
-	var account Account
-	// if err := db.Find(&accounts).Error; err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
-	if err := db.Where("id=?", 2).First(&account).Error; err != nil {
-		fmt.Println(err)
-		return
-	}
+// func main() {
+// 	db := connDB()
+// 	// var accounts []Account
+// 	var account Account
+// 	// if err := db.Find(&accounts).Error; err != nil {
+// 	// 	fmt.Println(err)
+// 	// 	return
+// 	// }
+// 	if err := db.Where("id=?", 2).First(&account).Error; err != nil {
+// 		fmt.Println(err)
+// 		return
+// 	}
 
-	fmt.Println(account)
+// 	fmt.Println(account)
 
-}
+// }
 
 func connDB() *gorm.DB {
 	// 读取配置文件信息
