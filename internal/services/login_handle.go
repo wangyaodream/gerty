@@ -50,8 +50,6 @@ func (c *CmsApp) Login(ctx *gin.Context) {
 			Nickname:  account.Nickname,
 		},
 	})
-
-	return
 }
 
 func generateSession() string {
