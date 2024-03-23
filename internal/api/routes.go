@@ -13,8 +13,8 @@ const (
 
 func CmsRouter(r *gin.Engine) {
 
-	// cmsApp := services.NewCmsApp()
-	cmsApp := services.CmsApp{}
+	cmsApp := services.NewCmsApp()
+	// cmsApp := services.CmsApp{}
 	// 创建一个中间件
 	session := &SessionAuth{}
 
@@ -30,5 +30,6 @@ func CmsRouter(r *gin.Engine) {
 	noAuth := r.Group(noAuthPath)
 	{
 		noAuth.POST("/cms/register", cmsApp.Register)
+		noAuth.POST("/cms/login", cmsApp.Login)
 	}
 }

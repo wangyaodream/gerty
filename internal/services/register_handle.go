@@ -2,7 +2,10 @@ package services
 
 import (
 	"fmt"
+	"gerty/internal/dao"
+	"gerty/internal/model"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -29,9 +32,29 @@ func (c *CmsApp) Register(ctx *gin.Context) {
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{})
 	}
-	fmt.Printf("password: %v\n", hashedPassword)
-	// TODO: 账号校验，检查账号是否存在
-	// TODO: 持久化
+	//账号校验，检查账号是否存在
+	accountDao := dao.NewAccountDao(c.db)
+	fmt.Println("accountDao 创建完成")
+	isExists, err := accountDao.IsExists(req.UserID)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if isExists {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "账号已存在"})
+		return
+	}
+	// 持久化
+	if err := accountDao.Create(model.Account{
+		UserID:   req.UserID,
+		Password: hashedPassword,
+		Nickname: req.Nickname,
+		Ct:       time.Now(),
+		Ut:       time.Now(),
+	}); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": 0,

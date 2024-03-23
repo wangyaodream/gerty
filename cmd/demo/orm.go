@@ -22,7 +22,7 @@ type DatabaseConfig struct {
 }
 
 type Account struct {
-	Id       int64     `gorm:"column:id";primary_key`
+	Id       int64     `gorm:"column:id;primary_key"`
 	UserID   string    `gorm:"column:user_id"`
 	Password string    `gorm:"column:password"`
 	Nickname string    `gorm:"column:nickname"`
@@ -31,7 +31,7 @@ type Account struct {
 }
 
 func (a Account) TableName() string {
-	return "account"
+	return "cms_account.account"
 }
 
 func main() {
@@ -63,7 +63,7 @@ func connDB() *gorm.DB {
 		panic(err)
 	}
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/cms_account?charset=utf8mb4&parseTime=True",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/?charset=utf8mb4&parseTime=True",
 		config.Database.Username,
 		config.Database.Password,
 		config.Database.Host,
