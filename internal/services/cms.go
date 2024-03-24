@@ -1,10 +1,12 @@
 package services
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 
+	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -21,13 +23,14 @@ type DatabaseConfig struct {
 }
 
 type CmsApp struct {
-	db *gorm.DB
+	db  *gorm.DB
+	rdb *redis.Client
 }
 
 func NewCmsApp() *CmsApp {
 	app := &CmsApp{}
 	connDB(app)
-
+	connRdb(app)
 	return app
 }
 
@@ -63,4 +66,19 @@ func connDB(app *CmsApp) {
 
 	// mysqlDB = mysqlDB.Debug()
 	app.db = mysqlDB
+}
+
+func connRdb(app *CmsApp) {
+	// redis-cli
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
+	_, err := rdb.Ping(context.Background()).Result()
+	if err != nil {
+		panic(err)
+	}
+	// return rdb
+	app.rdb = rdb
 }
