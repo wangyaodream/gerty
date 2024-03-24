@@ -16,17 +16,17 @@ type HelloRsp struct {
 }
 
 func (c *CmsApp) Hello(ctx *gin.Context) {
-	var req HelloReq
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// var req HelloReq
+	// if err := ctx.ShouldBindJSON(&req); err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"msg":  "ok",
 		"data": &HelloRsp{
-			Message: fmt.Sprintf("hello: %s", req.Name),
+			Message: fmt.Sprintf("hello: %s", "wangyao"),
 		},
 	})
 }

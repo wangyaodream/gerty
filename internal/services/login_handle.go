@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gerty/internal/dao"
+	"gerty/internal/utils"
 	"net/http"
 	"time"
 
@@ -63,14 +64,14 @@ func (c *CmsApp) Login(ctx *gin.Context) {
 func (c *CmsApp) generateSession(ctx context.Context, userID string) (string, error) {
 	sessionID := uuid.New().String()
 	// key : session_id:{user_id} val : session_id 	20s
-	sessionKey := fmt.Sprintf("session_id:%s", userID)
+	sessionKey := utils.GetSessionKey(userID)
 	err := c.rdb.Set(ctx, sessionKey, sessionID, time.Hour*8).Err()
 	if err != nil {
 		fmt.Printf("rdb set error = %v \n", err)
 		return "", err
 	}
 
-	authKey := fmt.Sprintf("session_auth:%s", sessionID)
+	authKey := utils.GetAuthKey(sessionID)
 	err = c.rdb.Set(ctx, authKey, time.Now().Unix(), time.Hour*8).Err()
 	if err != nil {
 		fmt.Printf("rdb set error = %v \n", err)
