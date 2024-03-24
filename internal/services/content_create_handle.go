@@ -55,7 +55,7 @@ func (c *CmsApp) ContentCreate(ctx *gin.Context) {
 		Quality:        int(req.Quality),
 		ApprovalStatus: int(req.ApprovalStatus),
 	})
-	fmt.Println("contentDAO 创建完成!")
+	// fmt.Println("contentDAO 创建完成!")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
