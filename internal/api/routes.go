@@ -26,6 +26,8 @@ func CmsRouter(r *gin.Engine) {
 		// 运行逻辑绑定到一个特定的Hello方法中
 		// root.GET("/cms/hello", cmsApp.Hello)
 		root.GET("/cms/hello", cmsApp.Hello)
+		// 内容生成
+		root.POST("/cms/content/create", cmsApp.ContentCreate)
 	}
 
 	noAuth := r.Group(noAuthPath)
