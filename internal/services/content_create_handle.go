@@ -2,6 +2,8 @@ package services
 
 import (
 	"fmt"
+	"gerty/internal/dao"
+	"gerty/internal/model"
 	"net/http"
 	"time"
 
@@ -37,11 +39,34 @@ func (c *CmsApp) ContentCreate(ctx *gin.Context) {
 		})
 	}
 
+	// 数据库交互
+	contentDao := dao.NewContentDao(c.db)
+	err := contentDao.Create(model.ContentDetail{
+		Title:          req.Title,
+		Description:    req.Description,
+		Author:         req.Author,
+		VideoURL:       req.VideoURL,
+		Thumbnail:      req.Thumbnail,
+		Category:       req.Category,
+		Duration:       req.Duration,
+		Resolution:     req.Resolution,
+		FileSize:       req.FileSize,
+		Format:         req.Format,
+		Quality:        int(req.Quality),
+		ApprovalStatus: int(req.ApprovalStatus),
+	})
+	fmt.Println("contentDAO 创建完成!")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"msg":  "ok",
 		"data": &ContentCreateRsp{
-			Message: fmt.Sprintf("OK"),
+			Message: fmt.Sprintln("OK"),
 		},
 	})
 }

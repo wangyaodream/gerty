@@ -65,7 +65,7 @@ func connDB(app *CmsApp) {
 	db.SetMaxIdleConns(2)
 
 	// mysqlDB = mysqlDB.Debug()
-	app.db = mysqlDB
+	app.db = mysqlDB.Debug()
 }
 
 func connRdb(app *CmsApp) {
