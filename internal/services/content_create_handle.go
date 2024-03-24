@@ -37,6 +37,7 @@ func (c *CmsApp) ContentCreate(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 	// 数据库交互
@@ -60,6 +61,7 @@ func (c *CmsApp) ContentCreate(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
