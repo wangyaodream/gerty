@@ -43,3 +43,50 @@ func (c *ContentDao) Update(id int, detail model.ContentDetail) error {
 	}
 	return nil
 }
+
+func (c *ContentDao) Delete(id int) error {
+	if err := c.db.Where("id = ?", id).Delete(&model.ContentDetail{}).Error; err != nil {
+		log.Printf("content delete error = %v", err)
+		return err
+	}
+	return nil
+}
+
+type FindParams struct {
+	ID       int
+	Page     int
+	PageSize int
+}
+
+func (c *ContentDao) Find(params *FindParams) ([]*model.ContentDetail, int64, error) {
+	// 构建查询条件
+	query := c.db.Model(&model.ContentDetail{})
+	if params.ID != 0 {
+		query = query.Where("id = ?", params.ID)
+	}
+
+	// 总数
+	var total int64
+
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	// 默认分页
+	var page, pageSize = 1, 10
+	if params.Page > 0 {
+		page = params.Page
+	}
+
+	if params.PageSize > 0 {
+		pageSize = params.PageSize
+	}
+
+	offset := (page - 1) * pageSize
+	var data []*model.ContentDetail
+	if err := query.Offset(offset).Limit(pageSize).Find(&data).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return data, total, nil
+}
